@@ -6,9 +6,8 @@ on:
       - main
   workflow_dispatch:
   schedule:
-    # Agendamento temporário para 20/06/2026 às 22:30 UTC
-    # (19:30 no horário de Brasília).
-    - cron: '30 22 20 6 *'
+    # Todos os dias às 00:00 UTC (21:00 no horário de Brasília).
+    - cron: '0 0 * * *'
 
 jobs:
   testes:
