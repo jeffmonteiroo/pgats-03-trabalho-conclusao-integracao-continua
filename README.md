@@ -42,10 +42,29 @@ O workflow inicial está em `.github/workflows/ci.yml` e contempla:
 
 - Execução automática por push na branch `main`;
 - Execução manual com `workflow_dispatch`;
-- Execução agendada com `schedule`;
+- Execução agendada diariamente às 21:00, no horário de Brasília;
 - Execução dos testes automatizados;
 - Geração de relatório com Mochawesome;
 - Armazenamento do relatório como artefato.
 
-> A documentação será complementada durante o desenvolvimento do trabalho.
+## Evidências
 
+### Testes executados localmente
+
+![Testes automatizados executados localmente](evidencias/01-testes-locais.png)
+
+### Relatório Mochawesome
+
+![Relatório HTML gerado pelo Mochawesome](evidencias/02-relatorio-mochawesome.png)
+
+### Execução automática por push e publicação do artefato
+
+![Pipeline executada por push com relatório armazenado](evidencias/03-pipeline-push-e-artefato.png)
+
+### Execução manual
+
+![Pipeline disparada manualmente](evidencias/04-pipeline-manual.png)
+
+### Execução agendada
+
+![Pipeline disparada pelo agendamento](evidencias/05-pipeline-agendada.png)
