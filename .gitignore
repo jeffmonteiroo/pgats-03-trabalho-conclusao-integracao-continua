@@ -4,3 +4,8 @@ mochawesome-report/
 .DS_Store
 npm-debug.log*
 
+
+dist/
+cypress/screenshots/
+cypress/videos/
+reports/
