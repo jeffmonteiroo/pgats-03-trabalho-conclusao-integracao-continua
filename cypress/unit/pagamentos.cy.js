@@ -16,9 +16,13 @@ describe('Unitários puros no runner Cypress (sem montar componentes)', () => {
     });
   }
   it('rejeita dados inválidos diretamente na função de domínio', () => {
-    expect(() => criarPagamento('', 'Empresa Exemplo', 10)).to.throw(TypeError);
-    expect(() => criarPagamento('DEMO', 'Empresa Exemplo', 0)).to.throw(TypeError);
-    expect(() => criarPagamento('DEMO', 'Empresa Exemplo', 100.001)).to.throw(TypeError);
+    // O módulo e o runner podem usar realms diferentes; compare o nome do erro,
+    // sem depender da identidade do construtor TypeError de outra janela.
+    for (const [referencia, valor] of [['', 10], ['DEMO', 0], ['DEMO', 100.001]]) {
+      expect(() => criarPagamento(referencia, 'Empresa Exemplo', valor))
+        .to.throw()
+        .and.have.property('name', 'TypeError');
+    }
   });
   it('converte valores com vírgula sem aceitar texto misturado', () => {
     expect(converterValor('100,01')).to.equal(100.01);
