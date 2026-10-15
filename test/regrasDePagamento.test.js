@@ -20,41 +20,41 @@ describe('Regras de negócio: limites e entradas inválidas', function () {
       assert.equal(classificarValor(valor), categoria);
     });
   }
-  for (const valor of [
-    0,
-    -1,
-    NaN,
-    Infinity,
-    -Infinity,
-    '100',
-    null,
-    undefined,
-    100.001,
-    1000000,
-    1e-9,
-    100.000000001
+  for (const [cenario, valor] of [
+    ['valor zero', 0],
+    ['valor negativo', -1],
+    ['NaN', NaN],
+    ['infinito positivo', Infinity],
+    ['infinito negativo', -Infinity],
+    ['valor informado como texto', '100'],
+    ['valor nulo', null],
+    ['valor não informado', undefined],
+    ['valor com três casas decimais', 100.001],
+    ['valor acima de R$ 999.999,99', 1000000],
+    ['fração menor que um centavo', 1e-9],
+    ['precisão extra após os centavos', 100.000000001]
   ]) {
-    it(`rejeita valor inválido: ${String(valor)}`, function () {
+    it(`rejeita ${cenario}`, function () {
       const servico = new ServicoDePagamento();
       assert.throws(() => servico.pagar('DEMO', 'Empresa', valor), TypeError);
       assert.equal(servico.consultarUltimoPagamento(), undefined);
     });
   }
-  for (const [referencia, empresa] of [
-    ['', 'Empresa'],
-    ['   ', 'Empresa'],
-    [null, 'Empresa'],
-    ['a'.repeat(81), 'Empresa'],
-    ['DEMO', ''],
-    ['DEMO', '  '],
-    ['DEMO', null],
-    ['DEMO', 'a'.repeat(101)]
+  for (const [cenario, referencia, empresa] of [
+    ['referência vazia', '', 'Empresa'],
+    ['referência só com espaços', '   ', 'Empresa'],
+    ['referência nula', null, 'Empresa'],
+    ['referência com mais de 80 caracteres', 'a'.repeat(81), 'Empresa'],
+    ['empresa vazia', 'DEMO', ''],
+    ['empresa só com espaços', 'DEMO', '  '],
+    ['empresa nula', 'DEMO', null],
+    ['empresa com mais de 100 caracteres', 'DEMO', 'a'.repeat(101)]
   ]) {
-    it(`rejeita referência/empresa inválida: ${JSON.stringify([referencia, empresa])}`, function () {
+    it(`rejeita ${cenario}`, function () {
       assert.throws(() => criarPagamento(referencia, empresa, 10), TypeError);
     });
   }
-  it('normaliza espaços sem alterar o contrato original', function () {
+  it('remove espaços das extremidades da referência e da empresa', function () {
     assert.deepEqual(criarPagamento(' DEMO-01 ', ' Empresa Exemplo ', 10.1), {
       codigoBarras: 'DEMO-01',
       empresa: 'Empresa Exemplo',

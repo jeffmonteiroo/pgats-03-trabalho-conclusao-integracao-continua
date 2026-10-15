@@ -5,7 +5,7 @@ import {
 } from '../../src/servicoDePagamento.js';
 import { converterValor } from '../../src/valorDoFormulario.js';
 
-describe('Unitários puros no runner Cypress (sem montar componentes)', () => {
+describe('Unitários: classificação e registro de contas', () => {
   for (const [valor, categoria] of [
     [99.99, 'padrão'],
     [100, 'padrão'],
@@ -15,7 +15,7 @@ describe('Unitários puros no runner Cypress (sem montar componentes)', () => {
       expect(classificarValor(valor)).to.equal(categoria);
     });
   }
-  it('rejeita dados inválidos diretamente na função de domínio', () => {
+  it('rejeita referência vazia, valor zero e valor com três casas decimais', () => {
     // O módulo e o runner podem usar realms diferentes; compare o nome do erro,
     // sem depender da identidade do construtor TypeError de outra janela.
     for (const [referencia, valor] of [['', 10], ['DEMO', 0], ['DEMO', 100.001]]) {
@@ -28,7 +28,7 @@ describe('Unitários puros no runner Cypress (sem montar componentes)', () => {
     expect(converterValor('100,01')).to.equal(100.01);
     expect(converterValor('100abc')).to.be.NaN;
   });
-  it('consulta o último pagamento sem UI, API ou armazenamento', () => {
+  it('retorna a última das duas contas registradas', () => {
     const servico = new ServicoDePagamento();
     expect(servico.consultarUltimoPagamento()).to.be.undefined;
     servico.pagar('DEMO-A', 'Empresa A', 99.99);

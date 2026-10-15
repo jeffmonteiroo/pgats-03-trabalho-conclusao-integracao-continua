@@ -8,7 +8,7 @@ function preencher(valor = '100,01') {
 }
 
 describe('Componente: FormularioPagamento', () => {
-  it('mostra erros acessíveis e foca o primeiro campo vazio', () => {
+  it('indica os campos obrigatórios e foca a referência ao enviar o formulário vazio', () => {
     cy.mount(<FormularioPagamento onRegistrar={cy.stub().as('registrar')} />);
     cy.contains('button', 'Registrar simulação').click();
     cy.get('[role=alert]').should('contain', 'Confira os campos');

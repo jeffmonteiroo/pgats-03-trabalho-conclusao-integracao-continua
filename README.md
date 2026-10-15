@@ -50,11 +50,11 @@ A classificação de um teste depende do **escopo**, não do nome da ferramenta.
 | Unitários com Mocha | Domínio, fronteiras, inválidos, conversão e adaptador de armazenamento com fake em memória; inclui os cinco casos originais | `npm test` |
 | Relatório Mocha | Mesma suíte, com HTML e JSON Mochawesome | `npm run test:report` |
 | Unitários no Cypress | Importam funções/classes e as chamam diretamente, **sem `cy.visit` e sem `cy.mount`** | `npm run test:cypress:unit` |
-| Componentes no Cypress | Montam React com `cy.mount`: formulário, erros acessíveis, foco, correção, teclado, envio repetido, falha ao salvar e recuperação de JSON corrompido | `npm run test:component` |
+| Componentes no Cypress | Montam React com `cy.mount`: mensagens de erro e atributos ARIA, foco, correção, teclado, envio repetido, falha ao salvar e recuperação de JSON corrompido | `npm run test:component` |
 | E2E no Cypress | Dois fluxos no app completo servido localmente: registrar/consultar/recarregar; rejeitar valor inválido/corrigir para R$ 100 em viewport móvel | `npm run test:e2e` |
 | Todos | Mocha com relatório, unitários Cypress, componentes e E2E com build | `npm run test:all` |
 
-Os unitários Cypress utilizam uma configuração separada (`cypress.unit.config.js`). O comando interno é `--e2e` apenas para iniciar o runner sem um servidor de componentes: **isso não transforma testes diretos de função em testes E2E**. A repetição de alguns casos de fronteira entre Mocha e Cypress é intencional e didática, não uma necessidade para toda aplicação.
+O script `test:cypress:unit` usa `--e2e` com `cypress.unit.config.js` para iniciar o runner sem servidor de componentes. Os testes continuam unitários: importam o domínio e não abrem a aplicação. Os casos de fronteira também aparecem no Mocha para exercitar a mesma regra no Node e no navegador.
 
 `npm run test:e2e` constrói a aplicação, inicia o preview, aguarda a URL ficar disponível e encerra o servidor ao finalizar. Não é necessário iniciar o servidor manualmente. Para exploração interativa, use `npm run cypress:open`; para E2E, deixe `npm run preview` ativo após o build.
 
@@ -82,7 +82,7 @@ src/
 - **Estado consistente:** a memória só é alterada depois que a escrita termina. Se `setItem` falhar, o app mantém o resultado anterior e os campos para nova tentativa.
 - **Leitura defensiva:** o JSON salvo é revalidado e sua categoria é recalculada. Um registro ilegível não é apagado na abertura; a interface avisa que o próximo registro válido o substituirá.
 - **Acessibilidade básica:** rótulos associados, erros com `aria-describedby`, alerta, foco no primeiro campo inválido e envio pelo teclado. Isso não equivale a uma auditoria completa de acessibilidade.
-- **Escopo enxuto:** React + Vite, sem backend, autenticação, biblioteca de UI ou plataforma paga. A suíte Mocha permanece disponível independentemente do navegador.
+- **Execução local:** React + Vite, sem backend ou autenticação. Os testes Mocha não dependem de navegador; componentes e E2E precisam do Cypress.
 
 ## Integração contínua e evidências
 
